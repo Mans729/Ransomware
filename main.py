@@ -81,15 +81,22 @@ def generate_key():
     # Choix de l'algorithme [cite: 61]
     print(" 1. AES (Aléatoire)")
     print(" 2. PBKDF2 (Dérivé d'un mot de passe)")
-    algo_choice = input(" Choix (1/2) : ")
+    
+    algo_choice = ""
+    while algo_choice not in ['1', '2']:
+        algo_choice = input(" Choix (1/2) : ").strip()
+        if algo_choice not in ['1', '2']:
+            print(" [x] Choix invalide. Veuillez entrer 1 ou 2.")
     
     # Choix de la longueur [cite: 60]
     length = 0
     while length not in [128, 192, 256]:
         try:
             length = int(input(" Longueur de la clé (128, 192, 256) : "))
+            if length not in [128, 192, 256]:
+                print(" [x] Longueur invalide. Veuillez entrer 128, 192 ou 256.")
         except ValueError:
-            pass
+            print(" [x] Entrée invalide. Veuillez entrer un nombre.")
     
     key_bytes = b""
     metadata = {}
@@ -116,10 +123,6 @@ def generate_key():
             "salt": base64.b64encode(salt).decode('utf-8'),
             "iterations": 100000
         }
-    
-    else:
-        print(" [x] Choix invalide.")
-        return None
 
     return key_bytes, metadata
 
